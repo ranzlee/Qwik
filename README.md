@@ -55,4 +55,4 @@ mongod
 npm run start-dev
 ```
 
-Navigate to `http://localhost:3000`
+Navigate to `https://localhost:3000`

@@ -14,6 +14,7 @@ import * as passport from "passport";
 import expressValidator = require("express-validator");
 import fs = require("fs");
 import https = require("https");
+
 //read .env.config variables
 dotenv.config({ path: path.join(__dirname, ".env.config") });
 
@@ -31,17 +32,11 @@ mongoose.connection.on("error", () => {
   process.exit();
 });
 
-//display environment variable (development or production)
-console.log("process.env.NODE_ENV: " + process.env.NODE_ENV);
-
 //create express server
 const app = express();
 
 //if not production, setup webpack middleware for HMR and express detailed errors
 if (process.env.NODE_ENV !== "production") {
-  console.log(
-    "development mode - using webpack-dev-middleware with HMR enabled"
-  );
   const webpack = require("webpack");
   const webpackDevMiddleware = require("webpack-dev-middleware");
   const webpackHotMiddleware = require("webpack-hot-middleware");
@@ -73,7 +68,9 @@ app.use(expressValidator());
 app.use(
   session({
     resave: true,
-    saveUninitialized: true,
+    name: "connect.sid",
+    cookie: { expires: false, secure: true },
+    saveUninitialized: false,
     secret: process.env.SESSION_SECRET || "",
     store: new MongoStore({
       url: connectionUri,
@@ -115,7 +112,11 @@ import * as authenticationController from "./controllers/authentication";
 //app routes
 //test controller
 app.get("/test/dummy", (req, res) => {
-  res.send({ message: "Hello World!" });
+  if (req.user) {
+    res.send({ message: "hello " + req.user.profile.name });
+  } else {
+    res.send({ message: "hello anon!" });
+  }
 });
 //api controller
 app.get(
@@ -125,6 +126,7 @@ app.get(
   apiController.getFacebook
 );
 //authentication controller
+app.get("/auth/user", authenticationController.getUser);
 app.get(
   "/auth/facebook",
   authenticationController.redirectRootIfAuthenticated,
@@ -135,9 +137,10 @@ app.get(
   passport.authenticate("facebook"),
   authenticationController.authenticateFacebookCallback()
 );
+app.get("/auth/logout", authenticationController.logout);
 
-const privateKey = fs.readFileSync("key.pem");
-const certificate = fs.readFileSync("certificate.pem");
+const privateKey = fs.readFileSync(path.join(__dirname, "key.pem"));
+const certificate = fs.readFileSync(path.join(__dirname, "certificate.pem"));
 
 https
   .createServer(

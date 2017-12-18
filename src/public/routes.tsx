@@ -9,7 +9,24 @@ import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 export default class Routes extends React.Component {
+  logout = (event: any) => {
+    event.preventDefault();
+    localStorage.removeItem("user");
+    location.assign("/auth/logout");
+  };
+
   render() {
+    let authLink = null;
+    if (localStorage.getItem("user") != null) {
+      authLink = <NavItem onClick={this.logout}>LOGOUT</NavItem>;
+    } else {
+      authLink = (
+        <LinkContainer to="/login">
+          <NavItem eventKey={1}>LOGIN</NavItem>
+        </LinkContainer>
+      );
+    }
+
     return (
       <div>
         <Navbar fluid fixedTop inverse collapseOnSelect>
@@ -28,11 +45,7 @@ export default class Routes extends React.Component {
                 <NavItem eventKey={3}>ABOUT</NavItem>
               </LinkContainer>
             </Nav>
-            <Nav pullRight>
-              <LinkContainer to="/login">
-                <NavItem eventKey={1}>LOGIN</NavItem>
-              </LinkContainer>
-            </Nav>
+            <Nav pullRight>{authLink}</Nav>
           </Navbar.Collapse>
         </Navbar>
         <Route exact path="/" component={App} />

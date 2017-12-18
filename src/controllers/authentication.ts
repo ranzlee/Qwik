@@ -16,6 +16,19 @@ export let redirectRootIfAuthenticated = (
   }
 };
 
+export let getUser = (req: Request, res: Response) => {
+  if (req.user) {
+    res.send({ user: { name: req.user.profile.name, claims: [] } });
+  } else {
+    res.send({ user: null });
+  }
+};
+
+export let logout = (req: Request, res: Response) => {
+  req.logout();
+  res.redirect("/");
+};
+
 export let authenticateFacebook = () => {
   return passport.authenticate("facebook", {
     scope: ["email", "public_profile"]
