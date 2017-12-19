@@ -59,12 +59,10 @@ app.use(compression());
 //use morgan logger
 //TODO: perhaps this should be dev only! RESEARCH
 app.use(logger("dev"));
-//TODO: do we need this parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //TODO: what the hell is this
 app.use(expressValidator());
-//TODO: Research this session stuff
 app.use(
   session({
     resave: true,
@@ -84,10 +82,8 @@ app.use(passport.session());
 //use flash messages
 //TODO: Research this
 app.use(flash());
-//TODO: what the hell is this
 app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
-//TODO: I assume this is putting the request user in the response
 app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
