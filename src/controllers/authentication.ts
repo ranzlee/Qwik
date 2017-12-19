@@ -45,3 +45,20 @@ export let authenticateFacebookCallback = () => {
     }
   );
 };
+
+export let authenticateGoogle = () => {
+  return passport.authenticate("google", {
+    scope: ["email", "profile"]
+  });
+};
+
+export let authenticateGoogleCallback = () => {
+  return (
+    passport.authenticate("google"),
+    (req: Request, res: Response) => {
+      if (req.session) {
+        res.redirect("/#/home");
+      }
+    }
+  );
+};

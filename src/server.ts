@@ -117,8 +117,10 @@ app.get("/test/dummy", (req, res) => {
     res.send({ message: "hello anon!" });
   }
 });
-//authentication controller
+//authentication controller common
 app.get("/auth/user", authenticationController.getUser);
+app.get("/auth/logout", authenticationController.logout);
+//facebook
 app.get(
   "/auth/facebook",
   authenticationController.redirectRootIfAuthenticated,
@@ -129,7 +131,17 @@ app.get(
   passport.authenticate("facebook"),
   authenticationController.authenticateFacebookCallback()
 );
-app.get("/auth/logout", authenticationController.logout);
+//google
+app.get(
+  "/auth/google",
+  authenticationController.redirectRootIfAuthenticated,
+  authenticationController.authenticateGoogle()
+);
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google"),
+  authenticationController.authenticateGoogleCallback()
+);
 
 const privateKey = fs.readFileSync(path.join(__dirname, "key.pem"));
 const certificate = fs.readFileSync(path.join(__dirname, "certificate.pem"));

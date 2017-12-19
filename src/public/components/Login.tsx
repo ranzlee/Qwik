@@ -17,6 +17,19 @@ export default class Login extends React.Component {
             </a>
           </Col>
         </Row>
+        <br />
+        <Row>
+          <Col lg={4} />
+          <Col lg={4}>
+            <a
+              className="btn btn-block btn-social btn-google"
+              href="/auth/google"
+            >
+              <i className="fa fa-google" />
+              Sign in with Google
+            </a>
+          </Col>
+        </Row>
       </Grid>
     );
   }
