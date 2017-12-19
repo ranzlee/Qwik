@@ -1,14 +1,14 @@
 import * as passport from "passport";
 import * as passportFacebook from "passport-facebook";
 import * as passportGoogle from "passport-google-oauth";
-import { default as User } from "../models/User";
+import { default as User, UserModel } from "../models/User";
 import { Request, Response, NextFunction, Express } from "express";
 import * as linq from "linq";
 
 const FacebookStrategy = passportFacebook.Strategy;
 const GoogleStrategy = passportGoogle.OAuth2Strategy;
 
-passport.serializeUser<any, any>((user, done) => {
+passport.serializeUser<UserModel, any>((user, done) => {
   done(undefined, user.id);
 });
 
@@ -44,15 +44,15 @@ passport.use(
             if (err) {
               return done(err);
             }
-            const user: any =
+            const user: UserModel =
               existingEmailUser == null ? new User() : existingEmailUser;
             user.email = profile._json.email;
             user.facebook = profile.id;
             let token = linq
               .from(user.tokens)
-              .firstOrDefault(x => (x as any).kind === "facebook");
+              .firstOrDefault(x => x.kind === "facebook");
             if (token) {
-              (token as any).accessToken = accessToken;
+              token.accessToken = accessToken;
             } else {
               user.tokens.push({ kind: "facebook", accessToken });
             }
@@ -110,15 +110,15 @@ passport.use(
             if (err) {
               return done(err);
             }
-            const user: any =
+            const user: UserModel =
               existingEmailUser == null ? new User() : existingEmailUser;
             user.email = googleProfile.value;
             user.google = profile.id;
             let token = linq
               .from(user.tokens)
-              .firstOrDefault(x => (x as any).kind === "google");
+              .firstOrDefault(x => x.kind === "google");
             if (token) {
-              (token as any).accessToken = accessToken;
+              token.accessToken = accessToken;
             } else {
               user.tokens.push({
                 kind: "google",
