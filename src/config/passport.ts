@@ -1,14 +1,11 @@
 import * as passport from "passport";
-import * as request from "request";
-import * as passportLocal from "passport-local";
+//import * as request from "request";
 import * as passportFacebook from "passport-facebook";
-import * as _ from "lodash";
+//import * as _ from "lodash";
 
-// import { User, UserType } from '../models/User';
 import { default as User } from "../models/User";
 import { Request, Response, NextFunction, Express } from "express";
 
-const LocalStrategy = passportLocal.Strategy;
 const FacebookStrategy = passportFacebook.Strategy;
 
 passport.serializeUser<any, any>((user, done) => {
@@ -20,33 +17,6 @@ passport.deserializeUser<any, any>((id, done) => {
     done(err, user);
   });
 });
-
-/**
- * Sign in using Email and Password.
- */
-passport.use(
-  new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
-    User.findOne({ email: email.toLowerCase() }, (err, user: any) => {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
-        return done(undefined, false, { message: `Email ${email} not found.` });
-      }
-      user.comparePassword(password, (err: Error, isMatch: boolean) => {
-        if (err) {
-          return done(err);
-        }
-        if (isMatch) {
-          return done(undefined, user);
-        }
-        return done(undefined, false, {
-          message: "Invalid email or password."
-        });
-      });
-    });
-  })
-);
 
 /**
  * OAuth Strategy Overview
@@ -75,7 +45,7 @@ passport.use(
       profileFields: ["name", "email", "link", "locale", "timezone"],
       passReqToCallback: true
     },
-    (req: any, accessToken, refreshToken, profile, done) => {
+    (req: Request, accessToken, refreshToken, profile, done) => {
       if (req.user) {
         User.findOne({ facebook: profile.id }, (err, existingUser) => {
           if (err) {
@@ -157,30 +127,3 @@ passport.use(
     }
   )
 );
-
-/**
- * Login Required middleware.
- */
-export let isAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-};
-
-/**
- * Authorization Required middleware.
- */
-export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
-  const provider = req.path.split("/").slice(-1)[0];
-
-  if (_.find(req.user.tokens, { kind: provider })) {
-    next();
-  } else {
-    res.redirect(`/auth/${provider}`);
-  }
-};

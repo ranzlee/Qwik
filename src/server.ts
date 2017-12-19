@@ -103,10 +103,9 @@ app.use(
 );
 
 //passport variables are in .env.config, so load the variables first
-import * as passportConfig from "./config/passport";
+require("./config/passport");
 
 //import controllers
-import * as apiController from "./controllers/api";
 import * as authenticationController from "./controllers/authentication";
 
 //app routes
@@ -118,13 +117,6 @@ app.get("/test/dummy", (req, res) => {
     res.send({ message: "hello anon!" });
   }
 });
-//api controller
-app.get(
-  "/api/facebook",
-  passportConfig.isAuthenticated,
-  passportConfig.isAuthorized,
-  apiController.getFacebook
-);
 //authentication controller
 app.get("/auth/user", authenticationController.getUser);
 app.get(
