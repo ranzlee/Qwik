@@ -1,6 +1,6 @@
 export class User {
   name: string;
-  tenets: Array<Tenant>;
+  tenants: Array<Tenant>;
 }
 
 export class Tenant {

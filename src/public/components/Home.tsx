@@ -75,7 +75,9 @@ export default class Home extends React.Component<HomeProps, HomeState> {
                   </Col>
                 </Row>
                 <HelpBlock>Validation is based on string length.</HelpBlock>
-                <Button onClick={this.handleSubmit}>Say Hi To Me!</Button>
+                <Button bsClass="btn btn-success" onClick={this.handleSubmit}>
+                  Say Hi To Me!
+                </Button>
               </FormGroup>
             </form>
           </Col>
