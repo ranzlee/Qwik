@@ -29,7 +29,7 @@ export default class Routes extends React.Component {
 
     return (
       <div>
-        <Navbar fluid fixedTop inverse collapseOnSelect>
+        <Navbar fluid fixedTop collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
               <Link to="/">QWIK</Link>

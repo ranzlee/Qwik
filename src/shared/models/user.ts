@@ -1,9 +1,9 @@
 export class User {
   name: string;
-  tenets: Array<Tenet>;
+  tenets: Array<Tenant>;
 }
 
-export class Tenet {
+export class Tenant {
   name: string;
   isActive: boolean;
   claims: Array<Claim>;

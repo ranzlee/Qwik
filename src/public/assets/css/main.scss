@@ -1,15 +1,15 @@
 //@import "themes/gsdk/gsdk/_variables";
-//@import "themes/modern/_variables";
+@import "themes/modern/_variables";
 //@import "themes/default/_variables";
-@import "themes/flatly/_variables";
+//@import "themes/flatly/_variables";
 
 @import "lib/bootstrap";
 @import "lib/font-awesome/font-awesome";
 
 //@import "themes/gsdk/gsdk.scss";
-//@import "themes/modern/_modern.scss";
+@import "themes/modern/_modern.scss";
 //@import "themes/default/_default.scss";
-@import "themes/flatly/_flatly.scss";
+//@import "themes/flatly/_flatly.scss";
 
 // Scaffolding
 // -------------------------
