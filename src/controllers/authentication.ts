@@ -3,6 +3,7 @@ import * as request from "request";
 import * as graph from "fbgraph";
 import { Response, Request, NextFunction } from "express";
 import * as passport from "passport";
+import { User } from "../shared/models/user";
 
 export let redirectRootIfAuthenticated = (
   req: Request,
@@ -16,11 +17,13 @@ export let redirectRootIfAuthenticated = (
   }
 };
 
-export let getUser = (req: Request, res: Response) => {
+export let getUser = (req: Request, res: Response): User | void => {
   if (req.user) {
-    res.send({ user: { name: req.user.profile.name, claims: [] } });
+    var u = new User();
+    u.name = req.user.profile.name;
+    res.send(u);
   } else {
-    res.send({ user: null });
+    res.send();
   }
 };
 

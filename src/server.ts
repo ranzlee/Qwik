@@ -105,14 +105,6 @@ require("./config/passport");
 import * as authenticationController from "./controllers/authentication";
 
 //app routes
-//test controller
-app.get("/test/dummy", (req, res) => {
-  if (req.user) {
-    res.send({ message: "hello " + req.user.profile.name });
-  } else {
-    res.send({ message: "hello anon!" });
-  }
-});
 //authentication controller common
 app.get("/auth/user", authenticationController.getUser);
 app.get("/auth/logout", authenticationController.logout);

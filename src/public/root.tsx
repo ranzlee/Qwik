@@ -3,19 +3,13 @@ import { Router } from "react-router";
 import { createHashHistory } from "history";
 import Routes from "./routes";
 import * as Axios from "axios";
+import * as UserService from "./services/userService";
 
 const history = createHashHistory();
 
 export default class Root extends React.Component {
   componentDidMount() {
-    Axios.default.get("/auth/user").then(response => {
-      if (response.data.user != null) {
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-      } else {
-        localStorage.removeItem("user");
-      }
-      this.forceUpdate();
-    });
+    UserService.syncUserOnMount(this);
   }
 
   render() {

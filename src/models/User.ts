@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
       picture: String
     }
   },
-  { timestamps: true }
+  { timestamps: true, usePushEach: true } as any
 );
 
 // export const User: UserType = mongoose.model<UserType>('User', userSchema);

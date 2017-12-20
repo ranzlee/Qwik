@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { UIEvent, SyntheticEvent } from "react";
 import * as axios from "axios";
+import { User } from "../../shared/models/user";
 
 export interface HomeState {
   name: string;
@@ -41,8 +42,12 @@ export default class Home extends React.Component<HomeProps, HomeState> {
   handleSubmit = (event: any) => {
     //alert("A name was submitted: " + this.state.name);
     event.preventDefault();
-    axios.default.get("/test/dummy").then(response => {
-      alert(response.data.message);
+    axios.default.get<User>("/auth/user").then(response => {
+      if (response.data) {
+        alert("Hi " + response.data.name + "!");
+      } else {
+        alert("Hi Anon!");
+      }
     });
   };
   render() {

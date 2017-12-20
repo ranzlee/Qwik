@@ -7,17 +7,17 @@ import About from "./components/About";
 import Login from "./components/Login";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import * as UserService from "./services/userService";
 
 export default class Routes extends React.Component {
   logout = (event: any) => {
     event.preventDefault();
-    localStorage.removeItem("user");
-    location.assign("/auth/logout");
+    UserService.logout();
   };
 
   render() {
     let authLink = null;
-    if (localStorage.getItem("user") != null) {
+    if (UserService.getUser() != null) {
       authLink = <NavItem onClick={this.logout}>LOGOUT</NavItem>;
     } else {
       authLink = (
